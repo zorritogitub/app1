@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi novia? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ff2d55, #c0392b);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            animation: floatHeart 6s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px 35px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotate(-5deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .emoji-big {
+            font-size: 80px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        h1 {
+            color: #c0392b;
+            font-size: 28px;
+            margin: 15px 0 10px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 5px 25px rgba(238, 90, 36, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 35px rgba(238, 90, 36, 0.6);
+        }
+
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+
+        .btn-no {
+            background: #ddd;
+            color: #666;
+            transition: all 0.1s ease;
+        }
+
+        .btn-no:hover {
+            background: #ccc;
+        }
+
+        .sure-screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .sure-screen.active {
+            display: block;
+        }
+
+        .main-screen {
+            display: block;
+        }
+
+        .main-screen.hidden {
+            display: none;
+        }
+
+        .final-screen {
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .final-screen.active {
+            display: block;
+        }
+
+        .final-screen .emoji-big {
+            font-size: 90px;
+        }
+
+        .final-screen h1 {
+            font-size: 32px;
+            color: #c0392b;
+        }
+
+        .final-screen .message {
+            font-size: 18px;
+            color: #555;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .countdown .label {
+            display: block;
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .countdown .days {
+            display: block;
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .btn-music {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #c0392b;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-music:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .notification-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            margin: 10px 0;
+            font-size: 13px;
+            display: none;
+        }
+
+        .notification-badge.show {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 20px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .btn {
+                padding: 12px 25px;
+                font-size: 17px;
+            }
+            .countdown .days {
+                font-size: 36px;
+            }
+            .emoji-big {
+                font-size: 60px;
+            }
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-container" id="heartsContainer"></div>
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <audio id="bgMusic" loop preload="auto">
+        <source src="amor.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div class="main-screen" id="mainScreen">
+            <div class="emoji-big">🥺</div>
+            <h1>¿Quieres ser mi novia? 💕</h1>
+            <p class="subtitle">Te prometo hacerte muy feliz 🌹</p>
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="sayYes()">¡SÍ! 💖</button>
+                <button class="btn btn-no" id="noBtn">No 😢</button>
+            </div>
+            <p style="margin-top:15px; color:#999; font-size:14px;">(No hay respuesta incorrecta)</p>
+        </div>
+
+        <div class="sure-screen" id="sureScreen">
+            <div class="emoji-big">🤔</div>
+            <h1>¿Estás completamente segura?</h1>
+            <p class="subtitle">No quiero que te arrepientas... ❤️</p>
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="finalYes()">Sí, estoy segura 💕</button>
+                <button class="btn btn-no" onclick="goBack()">Déjame pensarlo...</button>
+            </div>
+        </div>
+
+        <div class="final-screen" id="finalScreen">
+            <div class="emoji-big">💖</div>
+            <h1>¡Dijiste que SÍ! 🎉</h1>
+            <div class="message">
+                Eres lo mejor que me ha pasado 🌹<br>
+                Prometo cuidarte, quererte y hacerte sonreír cada día ❤️
+            </div>
+
+            <div class="countdown">
+                <span class="label">⏳ Faltan para vernos el 30 de agosto:</span>
+                <span class="days" id="countdownDays">--</span>
+                <span class="label">días 💕</span>
+            </div>
+
+            <div id="notifBadge" class="notification-badge">
+                🔔 ¡Notificación activada en tu barra! Te recordaré cada día cuánto falta 💕
+            </div>
+
+            <div style="margin: 15px 0; font-size: 20px;">
+                🌹❤️🌹❤️🌹❤️🌹
+            </div>
+
+            <p style="color:#666; font-size:15px; margin-top:10px;">
+                Te quiero mucho, <span id="partnerName">amor</span> 💋
+            </p>
+
+            <button class="btn-music" onclick="toggleMusic()">🎵 Pausar música</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // ===== IMPORTAR CAPACITOR LOCAL NOTIFICATIONS =====
+        let LocalNotifications = null;
+
+        async function loadCapacitorPlugins() {
+            try {
+                const cap = await import('https://unpkg.com/@capacitor/core@5.7.0/dist/index.js').catch(() => null);
+                if (cap && window.Capacitor && window.Capacitor.isNativePlatform()) {
+                    const notifModule = await import('https://unpkg.com/@capacitor/local-notifications@5.0.7/dist/index.js').catch(() => null);
+                    if (notifModule) {
+                        LocalNotifications = notifModule.LocalNotifications;
+                    }
+                }
+            } catch(e) {
+                console.log('Capacitor no disponible en este entorno');
+            }
+        }
+
+        // ===== FUNCIÓN PRINCIPAL DE NOTIFICACIÓN PERSISTENTE =====
+        async function programarNotificacionDiaria(diasRestantes) {
+            // Si no hay plugin nativo disponible, salir silenciosamente
+            if (!LocalNotifications || !window.Capacitor || !window.Capacitor.isNativePlatform()) {
+                console.log('Notificaciones nativas no disponibles en este entorno');
+                return false;
+            }
+
+            try {
+                // Pedir permiso
+                const perm = await LocalNotifications.requestPermissions();
+                if (perm.display !== 'granted') {
+                    console.log('Permiso de notificaciones denegado');
+                    return false;
+                }
+
+                // Cancelar notificaciones anteriores para no duplicar
+                await LocalNotifications.cancel({ notifications: [{ id: 1001 }, { id: 1002 }] }).catch(() => {});
+
+                // Notificación inmediata (aparece al abrir la app)
+                await LocalNotifications.schedule({
+                    notifications: [
+                        {
+                            id: 1001,
+                            title: '💕 ¡Te quiero mucho!',
+                            body: diasRestantes > 0
+                                ? `Faltan ${diasRestantes} días para vernos el 30 de agosto 🌹`
+                                : diasRestantes === 0
+                                    ? '🎉 ¡HOY es el día! ¡Por fin nos vemos! 💖'
+                                    : '❤️ Ya pasó, pero te sigo queriendo siempre 🌹',
+                            schedule: { at: new Date(Date.now() + 1000) }, // 1 segundo después
+                            ongoing: true,        // Notificación persistente (no se puede deslizar)
+                            autoCancel: false,
+                            smallIcon: 'ic_stat_icon_config_sample',
+                            iconColor: '#ff2d55',
+                            extra: { tipo: 'cuenta_regresiva' }
+                        }
+                    ]
+                });
+
+                // Notificación diaria programada a las 9am
+                const manana = new Date();
+                manana.setDate(manana.getDate() + 1);
+                manana.setHours(9, 0, 0, 0);
+
+                await LocalNotifications.schedule({
+                    notifications: [
+                        {
+                            id: 1002,
+                            title: '💕 Buenos días, mi amor',
+                            body: diasRestantes > 1
+                                ? `¡Faltan ${diasRestantes - 1} días para vernos! 🌹`
+                                : '🎉 ¡Mañana nos vemos! ¡Qué emoción! 💖',
+                            schedule: {
+                                at: manana,
+                                repeats: true,
+                                every: 'day'
+                            },
+                            ongoing: false,
+                            autoCancel: true,
+                            smallIcon: 'ic_stat_icon_config_sample',
+                            iconColor: '#ff2d55',
+                        }
+                    ]
+                });
+
+                return true;
+
+            } catch (err) {
+                console.log('Error al programar notificación:', err);
+                return false;
+            }
+        }
+
+        // ===== CORAZONES FLOTANTES =====
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const emojis = ['❤️', '💕', '💖', '💗', '💓', '🌸', '🌹', '✨'];
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                heart.style.animationDelay = (Math.random() * 8) + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // ===== BOTÓN "NO" QUE HUYE =====
+        const noBtn = document.getElementById('noBtn');
+        let noClickCount = 0;
+
+        noBtn.addEventListener('mouseover', function() {
+            if (noClickCount < 10) {
+                const x = Math.random() * 200 - 100;
+                const y = Math.random() * 200 - 100;
+                this.style.transform = `translate(${x}px, ${y}px)`;
+                const textos = ['¿Segura? 😅', 'Piensa bien 😏', 'No te escapes 🥺', 'Dime que sí ❤️', 'Te quiero 💕', 'No huyas 🥰', 'Solo di que sí 😘', 'Mi amor 💖', 'Por favor 🙏', 'Te lo pido 💗'];
+                this.textContent = textos[noClickCount] || 'No 😢';
+                noClickCount++;
+            }
+        });
+
+        noBtn.addEventListener('click', function() {
+            if (noClickCount < 10) {
+                const x = Math.random() * 300 - 150;
+                const y = Math.random() * 300 - 150;
+                this.style.transform = `translate(${x}px, ${y}px)`;
+                const textos = ['¿Segura? 😅', 'Piensa bien 😏', 'No te escapes 🥺', 'Dime que sí ❤️', 'Te quiero 💕', 'No huyas 🥰', 'Solo di que sí 😘', 'Mi amor 💖', 'Por favor 🙏', 'Te lo pido 💗'];
+                this.textContent = textos[noClickCount] || 'No 😢';
+                noClickCount++;
+            } else {
+                this.style.display = 'none';
+                alert('💕 No hay opción de decir no... ¡Tienes que decir que sí! 😘');
+            }
+        });
+
+        // ===== FUNCIONES DE PANTALLAS =====
+        window.sayYes = function() {
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('sureScreen').classList.add('active');
+            playMusic();
+        };
+
+        window.goBack = function() {
+            document.getElementById('sureScreen').classList.remove('active');
+            document.getElementById('mainScreen').classList.remove('hidden');
+        };
+
+        window.finalYes = async function() {
+            document.getElementById('sureScreen').classList.remove('active');
+            document.getElementById('finalScreen').classList.add('active');
+            const dias = startCountdown();
+            launchConfetti();
+            playMusic();
+
+            // Programar notificación persistente
+            const exito = await programarNotificacionDiaria(dias);
+            if (exito) {
+                document.getElementById('notifBadge').classList.add('show');
+            }
+        };
+
+        // ===== MÚSICA =====
+        let musicPlaying = false;
+        const audio = document.getElementById('bgMusic');
+
+        function playMusic() {
+            if (!musicPlaying) {
+                audio.play()
+                    .then(() => { musicPlaying = true; })
+                    .catch((error) => {
+                        console.log('Error al reproducir: ' + error);
+                    });
+            }
+        }
+
+        window.toggleMusic = function() {
+            if (musicPlaying) {
+                audio.pause();
+                musicPlaying = false;
+                document.querySelector('.btn-music').textContent = '🎵 Activar música';
+            } else {
+                audio.play().then(() => {
+                    musicPlaying = true;
+                    document.querySelector('.btn-music').textContent = '🎵 Pausar música';
+                }).catch(() => {});
+            }
+        };
+
+        document.addEventListener('click', function autoPlay() {
+            playMusic();
+            document.removeEventListener('click', autoPlay);
+        });
+
+        window.addEventListener('load', function() {
+            audio.play().then(() => {
+                musicPlaying = true;
+            }).catch(() => {
+                const notice = document.createElement('p');
+                notice.style.color = '#999';
+                notice.style.fontSize = '12px';
+                notice.style.marginTop = '10px';
+                notice.textContent = '🎵 Haz clic en cualquier parte para activar la música';
+                document.querySelector('.main-screen').appendChild(notice);
+            });
+        });
+
+        // ===== CUENTA REGRESIVA =====
+        function startCountdown() {
+            const targetDate = new Date('2026-08-30T00:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+            if (days > 0) {
+                document.getElementById('countdownDays').textContent = days;
+            } else if (days === 0) {
+                document.getElementById('countdownDays').textContent = '🎉 ¡HOY!';
+            } else {
+                document.getElementById('countdownDays').textContent = '❤️ Ya pasó';
+            }
+            return days;
+        }
+
+        // ===== CONFETI =====
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ff6b6b', '#ff2d55', '#ffd93d', '#6bcb77', '#4d96ff', '#ff9ff3', '#feca57'];
+            const shapes = ['■', '●', '▲', '★', '◆', '❤'];
+
+            for (let i = 0; i < 120; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                piece.style.color = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                piece.style.animationDelay = (Math.random() * 3) + 's';
+                container.appendChild(piece);
+                setTimeout(() => { piece.remove(); }, 6000);
+            }
+
+            setTimeout(() => {
+                if (document.getElementById('finalScreen').classList.contains('active')) {
+                    launchConfetti();
+                }
+            }, 5000);
+        }
+
+        // ===== NOMBRE PERSONALIZABLE =====
+        document.getElementById('partnerName').textContent = 'mi vida ❤️';
+
+        // ===== PREVENIR SALIDA ACCIDENTAL =====
+        window.addEventListener('beforeunload', function(e) {
+            if (document.getElementById('finalScreen').classList.contains('active')) {
+                e.preventDefault();
+                e.returnValue = '¿Ya te vas? 😢 Quédate conmigo un poco más 💕';
+            }
+        });
+
+        // ===== INICIALIZAR CAPACITOR AL CARGAR =====
+        loadCapacitorPlugins();
+
+    </script>
+</body>
+</html>

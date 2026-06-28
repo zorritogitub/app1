@@ -1,0 +1,21 @@
+{
+  "appId": "com.tunombre.minovia",
+  "appName": "Te amoww ❤️",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#ff6b6b",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#ff2d55",
+      "sound": null
+    }
+  }
+}
